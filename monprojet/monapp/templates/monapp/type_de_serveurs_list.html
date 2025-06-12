@@ -1,0 +1,15 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Liste des types de Serveurs</h2>
+<a href="{% url 'type_de_serveurs_create' %}">➕ Ajouter un type de serveur</a>
+<ul>
+    {% for type in types %}
+        <li>
+            <strong>{{ type.type }}</strong> ({{ type.description_serveurs}})
+            | <a href="{% url 'type_de_serveurs_update' type.pk %}">Modifier</a>
+            | <a href="{% url 'type_de_serveurs_delete' type.pk %}" onclick="return confirm('Es-tu sûr de vouloir supprimer ce type de serveur ?')">Supprimer</a>
+
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

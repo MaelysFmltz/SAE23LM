@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mon Projet Django{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'monapp/index.css' %}">
+
+</head>
+<body>
+    <nav>
+        <a href="/">Accueil</a> |
+        <a href="{% url 'type_de_serveurs_list' %}">Type de serveurs</a> |
+        <a href="{% url 'serveurs_list' %}">Serveurs</a> |
+        <a href="{% url 'services_list' %}">Services</a> |
+        <a href="{% url 'utilisateurs_list' %}">Utilisateurs</a> |
+        <a href="{% url 'applications_list' %}">Applications</a> |
+        <a href="{% url 'usageressource_list' %}">Usages</a>
+    </nav>
+
+    <hr>
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>

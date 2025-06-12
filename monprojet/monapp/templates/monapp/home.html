@@ -1,0 +1,39 @@
+{% extends 'monapp/base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+  <h1>Bienvenue sur le gestionnaire de ressources numériques </h1>
+  <p>Utilisez les liens ci-dessous pour naviguer entre les différentes entités :</p>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 30px;">
+    <div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Types de serveurs</h3>
+      <a href="{% url 'type_de_serveurs_list' %}">Voir</a>
+    </div>
+    <div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Serveurs</h3>
+      <a href="{% url 'serveurs_list' %}">Voir</a>
+    </div>
+    <div style="border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Services</h3>
+      <a href="{% url 'services_list' %}">Voir</a>
+    </div>
+  </div>
+
+
+  <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; margin-top: 30px;">
+    <div style="flex: 1; min-width: 250px; border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Utilisateurs</h3>
+      <a href="{% url 'utilisateurs_list' %}">Voir</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Applications</h3>
+      <a href="{% url 'applications_list' %}">Voir</a>
+    </div>
+    <div style="flex: 1; min-width: 250px; border: 1px solid #ccc; border-radius: 8px; padding: 20px;">
+      <h3>Usages</h3>
+      <a href="{% url 'usageressource_list' %}">Voir</a>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Utilisateurs des applications</h2>
+<ul>
+  {% for app in applications %}
+    <li>{{ app.utilisateur_applications }}</li>
+  {% empty %}
+    <li>Aucun utilisateur enregistré</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'applications_list' %}">Retour</a>
+{% endblock %}

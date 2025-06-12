@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Applications et services utilisés</h2>
+<ul>
+  {% for ur in usageressources %}
+    <li>{{ ur.applications.nom_applications }} → {{ ur.services.nom_services }}</li>
+  {% empty %}
+    <li>Aucune ressource utilisée</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'usageressource_list' %}">Retour</a>
+{% endblock %}

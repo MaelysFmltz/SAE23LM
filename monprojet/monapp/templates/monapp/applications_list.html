@@ -1,0 +1,19 @@
+{% extends 'monapp/base.html' %}
+    {% block content %}
+    <h2>Liste des Applications</h2>
+    <a href="{% url 'applications_create' %}">➕ Ajouter une application</a>
+    <ul>
+        {% for app in apps %}
+        <li>
+            <strong>{{ app.nom_applications }}</strong> – <strong>Utilisateur :</strong> {{ app.utilisateur_applications }}
+            {% if app.logo_applications %}
+            <br><img src="{{ app.logo_applications.url }}" width="50" alt="logo">
+            {% endif %}
+            | <a href="{% url 'applications_update' app.pk %}">Modifier</a>
+            | <a href="{% url 'applications_delete' app.pk %}"
+                 onclick="return confirm('Es-tu sûr de vouloir supprimer cette application ?')">Supprimer</a>
+            | <a href="{% url 'applications_affiche' %}">Afficher les utilisateurs</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% endblock %}

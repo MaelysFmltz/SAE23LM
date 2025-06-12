@@ -1,0 +1,16 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Liste des Usages des Ressources</h2>
+<a href="{% url 'usageressource_create' %}">➕ Ajouter un usage</a>
+<ul>
+    {% for usage in usages %}
+        <li>
+            {{ usage.applications.nom_applications }} utilise {{ usage.services.nom_services }} ({{ usage.type_ressource }})
+            | <a href="{% url 'usageressource_update' usage.pk %}">Modifier</a>
+            | <a href="{% url 'usageressource_delete' usage.pk %}" onclick="return confirm('Es-tu sûr de vouloir supprimer cet usage de ressource ?')">Supprimer</a>
+            | <a href="{% url 'usageressource_affiche' %}">Afficher les applications et services</a>
+
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

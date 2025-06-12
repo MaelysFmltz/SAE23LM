@@ -1,0 +1,12 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Types de serveurs enregistrés</h2>
+<ul>
+  {% for serveur in serveurs %}
+    <li>{{ serveur.type_serveurs }}</li>
+  {% empty %}
+    <li>Aucun type de serveur enregistré</li>
+  {% endfor %}
+</ul>
+<a href="{% url 'serveurs_list' %}">Retour</a>
+{% endblock %}

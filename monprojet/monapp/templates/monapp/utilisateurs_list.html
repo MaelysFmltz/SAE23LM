@@ -1,0 +1,15 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Liste des Utilisateurs</h2>
+<a href="{% url 'utilisateurs_create' %}">➕ Ajouter un utilisateur</a>
+<ul>
+    {% for utilisateur in utilisateurs %}
+        <li>
+            <strong>{{ utilisateur.nom_utilisateurs  }}</strong> ({{ utilisateur.prenom_utilisateurs}}) - {{ utilisateur.email_utilisateurs}}
+            | <a href="{% url 'utilisateurs_update' utilisateur.pk %}">Modifier</a>
+            | <a href="{% url 'utilisateurs_delete' utilisateur.pk %}" onclick="return confirm('Es-tu sûr de vouloir supprimer cet utilisateur ?')">Supprimer</a>
+
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

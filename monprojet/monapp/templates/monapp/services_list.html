@@ -1,0 +1,15 @@
+{% extends 'monapp/base.html' %}
+{% block content %}
+<h2>Liste des Services</h2>
+<a href="{% url 'services_create' %}">➕ Ajouter un service</a>
+<ul>
+    {% for service in services %}
+        <li>
+            <strong>{{ service.nom_services }}</strong> ({{ service.date_lancement }}) – {{ service.espace_memoire_utilise }} Mo
+            | <a href="{% url 'services_update' service.pk %}">Modifier</a>
+            | <a href="{% url 'services_delete' service.pk %}" onclick="return confirm('Es-tu sûr de vouloir supprimer ce service ?')">Supprimer</a>
+            | <a href="{% url 'services_affiche' %}">Afficher les serveurs</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
