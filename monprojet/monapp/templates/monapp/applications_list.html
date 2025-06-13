@@ -13,7 +13,14 @@
             | <a href="{% url 'applications_delete' app.pk %}"
                  onclick="return confirm('Es-tu sûr de vouloir supprimer cette application ?')">Supprimer</a>
             | <a href="{% url 'applications_affiche' %}">Afficher les utilisateurs</a>
+                <a href="{% url 'import_application' %}" class="btn btn-primary">Importer une application</a>
         </li>
+        h3>Importer une application depuis un fichier</h3>
+        <form method="POST" enctype="multipart/form-data" action="{% url 'import_application' %}">
+            {% csrf_token %}
+            <input type="file" name="file" required>
+            <button type="submit">Importer</button>
+</form>
         {% endfor %}
     </ul>
     {% endblock %}

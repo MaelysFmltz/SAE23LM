@@ -15,6 +15,7 @@ urlpatterns = [
     path('applications/<int:pk>/edit/', views.applications_update, name='applications_update'),
     path('applications/<int:pk>/delete/', views.applications_delete, name='applications_delete'),
     path('applications/affiche/', views.applications_affiche, name='applications_affiche'),
+    path('applications/import/', views.import_applications, name='import_application'),
 
     path('usageressources/', views.usageressource_list, name='usageressource_list'),
     path('usageressources/new/', views.usageressource_create, name='usageressource_create'),

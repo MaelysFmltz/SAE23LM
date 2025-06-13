@@ -1,5 +1,8 @@
 from django.db import models
 from email.policy import default
+from django.core.exceptions import ValidationError
+from django.db.models import Sum
+#from monapp.models import Services, UsageRessource
 
 class Serveurs(models.Model):
     nom_serveurs = models.CharField(max_length=100, default="serveur_test")  # Ajout d'un default pour éviter problème migration
@@ -45,16 +48,51 @@ class Utilisateurs(models.Model):
     def dico(self):
         return {"Nom":self.nom_utilisateurs,"Prenom":self.prenom_utilisateurs,"Email":self.email_utilisateurs}
 
+
+
 class Applications(models.Model):
     nom_applications = models.CharField(max_length=100)
     logo_applications = models.ImageField(upload_to='logos/', null=True, blank=True)
     utilisateur_applications = models.ForeignKey(Utilisateurs, on_delete=models.CASCADE)
+    memoire_utilisee = models.IntegerField(help_text="Mémoire utilisée en Mo", default=0)
+    cpu_utilise = models.IntegerField(help_text="Nombre de CPU nécessaires", default=1)
 
     def __str__(self):
         return self.nom_applications
 
+    def clean(self):
+
+        usages = UsageRessource.objects.filter(applications=self)
+        services_lies = Services.objects.filter(id__in=usages.values_list('services', flat=True))
+
+        if not services_lies.exists():
+            return
+
+
+        serveur = services_lies.first().serveur_lancement
+
+
+        memoire_services = Services.objects.filter(serveur_lancement=serveur).aggregate(
+            total=Sum('espace_memoire_utilise')
+        )['total'] or 0
+
+        memoire_totale = memoire_services + self.memoire_utilisee
+
+        if memoire_totale > serveur.capacite_stockage_serveurs:
+            raise ValidationError(
+                f"🚫 Impossible d'ajouter cette application. "
+                f"La mémoire totale ({memoire_totale} Mo) dépasse la capacité du serveur "
+                f"{serveur.nom_serveurs} ({serveur.capacite_stockage_serveurs} Mo)."
+            )
+
     def dico(self):
-        return {"Nom":self.nom_applications,"Logo":self.logo_applications,"Utilisateurs":self.utilisateur_applications}
+        return {
+            "Nom": self.nom_applications,
+            "Logo": self.logo_applications,
+            "Utilisateurs": self.utilisateur_applications,
+            "Mémoire utilisée": self.memoire_utilisee,
+            "CPU utilisés": self.cpu_utilise
+        }
 
 
 class UsageRessource(models.Model):

@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Services, Applications, UsageRessource, Utilisateurs, Serveurs, TypeServeurs
-from .forms import ServicesForm, ApplicationsForm, UsageRessourceForm, UtilisateursForm, ServeursForm, TypeServeursForm
+from .forms import ServicesForm, ApplicationsForm, UsageRessourceForm, UtilisateursForm, ServeursForm, TypeServeursForm,ImportApplicationsForm
+from django.views.generic.edit import CreateView
+import json
+from django.contrib import messages
 
 #PAGE D'ACCUEIL
 
@@ -36,6 +39,7 @@ def services_affiche(request):
     services = Services.objects.all()
     return render(request, 'monapp/services_affiche.html', {'services': services})
 
+
 # APPLICATIONS
 def applications_list(request):
     apps = Applications.objects.all()
@@ -65,6 +69,67 @@ def applications_affiche(request):
     applications = Applications.objects.all()
     return render(request, 'monapp/applications_affiche.html', {'applications': applications})
 
+class ApplicationsCreateView(CreateView):
+    model = Applications
+    form_class = ApplicationsForm
+    template_name = 'applications_create.html'
+    success_url = '/applications/new/'
+
+def import_applications(request):
+    if request.method == 'POST':
+        form = ImportApplicationsForm(request.POST, request.FILES)
+        if form.is_valid():
+            fichier = request.FILES['fichier']
+            try:
+                data = json.load(fichier)
+
+
+                serveur = Serveurs.objects.get(id=data['serveur_id'])
+
+
+                services_existants = Services.objects.filter(serveur_lancement=serveur)
+                memoire_utilisee = sum(s.espace_memoire_utilise for s in services_existants)
+                cpu_utilise = sum(s.applications_set.count() for s in services_existants)  # Ou une autre logique CPU si dispo
+
+
+                app_memoire = data['application']['memoire_utilisee']
+                app_cpu = data['application']['cpu_utilise']
+
+
+                if app_memoire + memoire_utilisee > serveur.capacite_stockage_serveurs:
+                    messages.error(request, "Mémoire insuffisante sur le serveur pour cette application.")
+                    return redirect('import_application')
+
+                if app_cpu + cpu_utilise > serveur.nombre_processeur_serveurs:
+                    messages.error(request, "CPU insuffisant sur le serveur pour cette application.")
+                    return redirect('import_application')
+
+                utilisateur = Utilisateurs.objects.get(id=data['application']['utilisateur_id'])
+                app = Applications.objects.create(
+                    nom_applications=data['application']['nom'],
+                    memoire_utilisee=app_memoire,
+                    cpu_utilise=app_cpu,
+                    utilisateur_applications=utilisateur
+                )
+
+
+                for service_data in data['services']:
+                    service = Services.objects.create(
+                        nom_services=service_data['nom_services'],
+                        espace_memoire_utilise=service_data['espace_memoire_utilise'],
+                        serveur_lancement=serveur
+                    )
+                    UsageRessource.objects.create(applications=app, services=service)
+
+                messages.success(request, "Application et services importés avec succès !")
+                return redirect('applications_list')
+
+            except Exception as e:
+                messages.error(request, f"Erreur lors de l'import : {str(e)}")
+    else:
+        form = ImportApplicationsForm()
+
+    return render(request, 'monapp/import_applications.html', {'form': form})
 
 # USAGE RESSOURCES
 def usageressource_list(request):
