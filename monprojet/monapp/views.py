@@ -105,6 +105,7 @@ def import_applications(request):
                     return redirect('import_application')
 
                 utilisateur = Utilisateurs.objects.get(id=data['application']['utilisateur_id'])
+
                 app = Applications.objects.create(
                     nom_applications=data['application']['nom'],
                     memoire_utilisee=app_memoire,

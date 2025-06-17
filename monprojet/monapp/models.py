@@ -61,7 +61,8 @@ class Applications(models.Model):
         return self.nom_applications
 
     def clean(self):
-
+        if not self.pk:
+            return
         usages = UsageRessource.objects.filter(applications=self)
         services_lies = Services.objects.filter(id__in=usages.values_list('services', flat=True))
 
@@ -80,7 +81,7 @@ class Applications(models.Model):
 
         if memoire_totale > serveur.capacite_stockage_serveurs:
             raise ValidationError(
-                f"🚫 Impossible d'ajouter cette application. "
+                f"Impossible d'ajouter cette application. "
                 f"La mémoire totale ({memoire_totale} Mo) dépasse la capacité du serveur "
                 f"{serveur.nom_serveurs} ({serveur.capacite_stockage_serveurs} Mo)."
             )

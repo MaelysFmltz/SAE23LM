@@ -38,10 +38,12 @@ class ApplicationsForm(forms.ModelForm):
         fields = '__all__'
 
     def clean(self):
+
         cleaned_data = super().clean()
         memoire_app = cleaned_data.get("memoire_utilisee")
         cpu_app = cleaned_data.get("cpu_utilise")
-
+        if not self.instance.pk:
+            return cleaned_data
         services_lies = UsageRessource.objects.filter(applications=self.instance)
 
         memoire_totale = memoire_app or 0

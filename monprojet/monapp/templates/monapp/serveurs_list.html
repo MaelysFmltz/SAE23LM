@@ -5,7 +5,7 @@
 <ul>
     {% for serveur in serveurs %}
         <li>
-            <strong>{{ serveur.nom_serveurs }}</strong> ({{ serveur.type_serveurs }}) – {{ serveur.nombre_processseur_serveurs }} - {{ serveur.capacite_memoire_serveurs }} Mo - {{ serveur.capacite_stokage_serveurs }} Mo - {{ serveur.type_serveurs }}
+            <strong>{{ serveur.nom_serveurs }}</strong> ({{ serveur.type_serveur }}) – {{ serveur.nombre_processeur_serveurs }} processeurs - {{ serveur.capacite_memoire_serveurs }} Mo de capacité de mémoire- {{ serveur.capacite_stockage_serveurs }} Mo de capacité de stockage - {{ serveur.type_serveurs }}
             | <a href="{% url 'serveurs_update' serveur.pk %}">Modifier</a>
             | <a href="{% url 'serveurs_delete' serveur.pk %}" onclick="return confirm('Es-tu sûr de vouloir supprimer ce serveur ?')">Supprimer</a>
             | <a href="{% url 'serveurs_affiche' %}">Afficher les types de serveurs</a>
